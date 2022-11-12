@@ -6,69 +6,107 @@ using System.Threading.Tasks;
 
 namespace SnakeAndLadderProblem222Batch
 {
-    
+    //game played by two players Player1 And Player2
     public class SnakeAndLadder
     {
+        public const int WinPosition = 100;
+        public static Random random = new Random();
+        //Methos for rolling the dice
+        public static int ThrowDice()
+        {
+            return random.Next(1, 7);
+        }
+        //method for checking option Snake or Ladder
+        public static int CheckOption()
+        {
+            return random.Next(0, 3);
+        }
         public static void Main(String[] args)
         {
-            Console.WriteLine("Welcome To Snake And Ladder Program");
-            //uc1 : Game played by single player
-            int Position = 0;
-            //uc4,uc5 : ensure player gets exact 100 position
-            int FinalPosition = 100;
-            int diceCount = 0;
-            Random random = new Random();
-            //uc2 : Player rolls a die to get between 1-6
+            int player1Position = 0;
+            int player2Position = 0;
+            int player1DiceCount = 0;
+            int player2DiceCount = 0;
 
-            int die = random.Next(1, 7);
-            diceCount++;
-            Console.WriteLine("Die rolled for : " + die);
-            Position += die;
-            while (Position <= FinalPosition)
+            while(player1Position < WinPosition-1 || player1Position < WinPosition - 1)
             {
-                die = random.Next(1, 7);
-                diceCount++;
-                Console.WriteLine("Die rolled for : " + die);
-                Position += die;
-                if (Position > FinalPosition)
-                {
-                    Position = Position - die;
-                }
-                Console.WriteLine("Player position is : " + Position);
-                //uc3 : Player checks for option LADDER or SNAKE
-                int option = random.Next(0, 3);
+                int player1ThrowDie = ThrowDice();
+                player1DiceCount++;
+                int player2ThrowDie = ThrowDice();
+                player2DiceCount++;
+                int option = CheckOption();
+
                 switch (option)
                 {
-                    case 2:
-                        Console.WriteLine("Player got Ladder Next position : {0}+{1}", Position, die);
-                        Position += die;
-                        if (Position > FinalPosition)
-                        {
-                            Position = Position - die;
-                        }
+                    case 0:
+                        Console.WriteLine("Player got No Play");
                         break;
                     case 1:
-                        Console.WriteLine("Player got Snake Next position : {0}-{1}", Position, die);
-                        Position -= die;
+                        Console.WriteLine("Player got the ladder");
+                        player1Position += player1ThrowDie;
+                        player2Position += player2ThrowDie;
+                        if (player1Position > WinPosition)
+                        {
+                            player1Position -= player1ThrowDie;
+                        }
+                        else if (player2Position > WinPosition)
+                        {
+                            player2Position -= player2ThrowDie;
+                        }
+                        Console.WriteLine("Player 1 position is = " + player1Position);
+                        Console.WriteLine("Player 2 position is = " + player2Position);
+                        //Player played one more time in case of ladder
+                        Console.WriteLine("Player got the ladder so player gets one more chance");
+                        player1Position += player1ThrowDie;
+                        player2Position += player2ThrowDie;
+                        if (player1Position > WinPosition)
+                        {
+                            player1Position -= player1ThrowDie;
+                        }
+                        else if (player2Position > WinPosition)
+                        {
+                            player2Position -= player2ThrowDie;
+                        }
+                        Console.WriteLine("Player 1 position is = " + player1Position);
+                        Console.WriteLine("Player 2 position is = " + player2Position);
                         break;
-
+                    case 2:
+                        Console.WriteLine("Player got the snake");
+                        if((player1Position - player1ThrowDie) < 0)
+                        {
+                            player1Position = 0;
+                        }
+                        else
+                        {
+                            player1Position -= player1ThrowDie;
+                        }
+                        if ((player2Position - player2ThrowDie) < 0)
+                        {
+                            player2Position = 0;
+                        }
+                        else
+                        {
+                            player2Position -= player2ThrowDie;
+                        }
+                        Console.WriteLine("Player 1 position is = " + player1Position);
+                        Console.WriteLine("Player 2 position is = " + player2Position);
+                        break;
                     default:
-                        Console.WriteLine("No Play");
                         break;
                 }
-                //UC4 , UC5 : get exact 100 position
-                if (Position == FinalPosition)
+                if (player1Position == WinPosition)
                 {
-                    Console.WriteLine("Player position is : " + Position);
+                    Console.WriteLine("Player 1 is won!");
+                    Console.WriteLine("Number of dice was played by player for win the game is = " + player1DiceCount);
                     break;
                 }
-                if (Position < 0)
+                else if ((player2Position == WinPosition) && (player1Position != WinPosition))
                 {
-                    Position = 0;
+                    Console.WriteLine("Player two is won!");
+                    Console.WriteLine("Number of dice was played by player for win the game is = " + player2DiceCount);
+                    break;
                 }
             }
-            Console.WriteLine("Players Final  position is : " + Position);
-            Console.WriteLine("Number of dice rolled for win : "+diceCount );
         }
     }
 }
