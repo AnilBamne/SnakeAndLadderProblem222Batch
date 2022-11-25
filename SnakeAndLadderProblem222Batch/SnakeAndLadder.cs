@@ -19,14 +19,9 @@ namespace SnakeAndLadderProblem222Batch
             int diceCount = 0;
             Random random = new Random();
             //uc2 : Player rolls a die to get between 1-6
-
-            int die = random.Next(1, 7);
-            diceCount++;
-            Console.WriteLine("Die rolled for : " + die);
-            Position += die;
             while (Position <= FinalPosition)
             {
-                die = random.Next(1, 7);
+                int die = random.Next(1, 7);
                 diceCount++;
                 Console.WriteLine("Die rolled for : " + die);
                 Position += die;
@@ -50,8 +45,11 @@ namespace SnakeAndLadderProblem222Batch
                     case 1:
                         Console.WriteLine("Player got Snake Next position : {0}-{1}", Position, die);
                         Position -= die;
+                        if (Position < 0)
+                        {
+                            Position = 0;
+                        }
                         break;
-
                     default:
                         Console.WriteLine("No Play");
                         break;
@@ -61,10 +59,6 @@ namespace SnakeAndLadderProblem222Batch
                 {
                     Console.WriteLine("Player position is : " + Position);
                     break;
-                }
-                if (Position < 0)
-                {
-                    Position = 0;
                 }
             }
             Console.WriteLine("Players Final  position is : " + Position);
